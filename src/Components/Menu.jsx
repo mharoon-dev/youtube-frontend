@@ -16,13 +16,13 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   flex: 1;
-  background-color: ${ ({ theme }) => theme.bg };
+  background-color: ${({ theme }) => theme.bgLighter};
   height: 100vh;
-  color: ${ ({ theme }) => theme.text };
+  color: ${({ theme }) => theme.text};
   position: sticky;
   top: 0;
 `;
@@ -49,11 +49,15 @@ const Item = styled.div`
   gap: 20px;
   cursor: pointer;
   padding: 3px 0px;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.soft};
+  }
 `;
 
 const Hr = styled.hr`
   margin: 15px 0px;
-  border: 0.5px solid ${ ({ theme }) => theme.soft };
+  border: 0.5px solid ${({ theme }) => theme.soft};
 `;
 
 const Login = styled.div`
@@ -82,15 +86,17 @@ const Title = styled.h2`
   margin-bottom: 10px;
 `;
 
-const Menu = ( { darkMode, setDarkMode }) => {
+const Menu = ({ darkMode, setDarkMode }) => {
   return (
     <>
       <Container>
         <Wrapper>
-          <Logo>
-            <Img src={youtubeLogo} />
-            Youtube
-          </Logo>
+          <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+            <Logo>
+              <Img src={youtubeLogo} />
+              Youtube
+            </Logo>
+          </Link>
           <Item>
             <HomeIcon />
             Home
@@ -115,8 +121,12 @@ const Menu = ( { darkMode, setDarkMode }) => {
           <Hr />
           <Login>
             Sign in to like videos, comment, and subscribe.
-            <Button><SettingsBrightnessOutlinedIcon/>
-            SIGN IN</Button>
+            <Link to="/signin" style={{ textDecoration: "none" }}>
+              <Button>
+                <AccountCircleOutlinedIcon />
+                SIGN IN
+              </Button>
+            </Link>
           </Login>
           <Hr />
           <Title>BEST OF YOUTUBE</Title>
@@ -159,7 +169,7 @@ const Menu = ( { darkMode, setDarkMode }) => {
           </Item>
           <Item onClick={() => setDarkMode(!darkMode)}>
             <HelpOutlineOutlinedIcon />
-            Light Mode
+            {darkMode ? "Light" : "Dark"} Mode
           </Item>
         </Wrapper>
       </Container>
