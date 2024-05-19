@@ -1,5 +1,4 @@
 import styled, { ThemeProvider } from "styled-components";
-import "./App.css";
 import Menu from "./Components/Menu.jsx";
 import Navbar from "./Components/Navbar";
 import { darkTheme, lightTheme } from "./utils/Theme.jsx";
@@ -33,7 +32,9 @@ function App() {
             <Navbar />
             <Wrapper>
               <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Home type="random" />} />
+                <Route path="/trend" element={<Home type="trend" />} />
+                <Route path="/subscriptions" element={<Home type="sub" />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/video/:id" element={<Video />} />
               </Routes>

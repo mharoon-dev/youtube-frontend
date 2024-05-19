@@ -3,6 +3,9 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Avatar } from "@mui/material";
+import VideoCallIcon from '@mui/icons-material/VideoCall';
 
 const Container = styled.div`
   position: sticky;
@@ -10,6 +13,7 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.bgLighter};
   height: 56px;
 `;
+
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
@@ -55,7 +59,18 @@ const Button = styled.button`
   gap: 5px;
 `;
 
+const User = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.text};
+`;
+
+
 const Navbar = () => {
+  const { currentUser } = useSelector(state => state.user);
+  console.log(currentUser)
   return (
     <Container>
       <Wrapper>
@@ -63,12 +78,20 @@ const Navbar = () => {
           <Input placeholder="Search" />
           <SearchOutlinedIcon />
         </Search>
-        <Link to="/signin" style={{ textDecoration: "none", color: "inherit" }}>
-          <Button>
-            <AccountCircleOutlinedIcon />
-            SIGN IN
-          </Button>
-        </Link>
+        {currentUser ? (
+          <User>
+            <VideoCallIcon />
+            <Avatar />
+            {currentUser?.data?.name}
+          </User>
+        ) : (
+          <Link to="signin" style={{ textDecoration: "none" }}>
+            <Button>
+              <AccountCircleOutlinedIcon />
+              SIGN IN
+            </Button>
+          </Link>
+        )}
       </Wrapper>
     </Container>
   );
