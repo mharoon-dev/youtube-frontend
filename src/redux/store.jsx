@@ -7,7 +7,7 @@ const store = configureStore(
   {
     reducer: {
       user: userReducer,
-      videoReducer,
+      video : videoReducer,
     },
   },
   +window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

@@ -89,7 +89,7 @@ const Link = styled.span`
 
 const api = axios.create({
   baseURL: LOCAL_URL,
-  withCredentials: true,
+  withCredentials: true, // Ensure this is set to send cookies
 });
 
 const SignIn = () => {
@@ -108,7 +108,10 @@ const SignIn = () => {
       });
       console.log(res.data);
       dispatch(loginSuccess(res.data.data));
-      Cookies.set("access_token", res.data.token,);
+      Cookies.set("access_token", res.data.token, {
+        sameSite: "Lax",
+        secure: true,
+      });
     } catch (error) {
       console.log(error);
       dispatch(loginFailure(error));
