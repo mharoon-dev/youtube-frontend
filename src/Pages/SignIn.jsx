@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { LOCAL_URL } from "../utils/urls.jsx";
 import axios from "axios";
-import { useDispatch } from "react-redux"; // Corrected useDispatch import
+import { useDispatch } from "react-redux";
 import {
   loginFailure,
   loginStart,
   loginSuccess,
-} from "../redux/Slices/userSlice.jsx"; // Ensure this path is correct
+} from "../redux/Slices/userSlice.jsx";
+import Cookies from "js-cookie";
 
 const Container = styled.div`
   display: flex;
@@ -88,6 +89,7 @@ const Link = styled.span`
 
 const api = axios.create({
   baseURL: LOCAL_URL,
+  withCredentials: true,
 });
 
 const SignIn = () => {
@@ -104,8 +106,9 @@ const SignIn = () => {
         name,
         password,
       });
-      console.log(res.data.data);
-      dispatch(loginSuccess(res.data));
+      console.log(res.data);
+      dispatch(loginSuccess(res.data.data));
+      Cookies.set("access_token", res.data.token,);
     } catch (error) {
       console.log(error);
       dispatch(loginFailure(error));

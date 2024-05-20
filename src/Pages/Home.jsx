@@ -20,7 +20,7 @@ const Home = ({ type }) => {
     console.log("fetching videos");
     const fetchVideos = async () => {
       try {
-        const res = await api.get(`/videos/${type}`);
+        const res = await api.get(`/videos/${type}` , {withCredentials: true});
         if (res.data) {
           console.log(res.data);
           setVideos(res.data);

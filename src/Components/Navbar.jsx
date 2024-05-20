@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Avatar } from "@mui/material";
-import VideoCallIcon from '@mui/icons-material/VideoCall';
+import VideoCallIcon from "@mui/icons-material/VideoCall";
 
 const Container = styled.div`
   position: sticky;
@@ -67,10 +67,9 @@ const User = styled.div`
   color: ${({ theme }) => theme.text};
 `;
 
-
 const Navbar = () => {
-  const { currentUser } = useSelector(state => state.user);
-  console.log(currentUser)
+  const { currentUser } = useSelector((state) => state.user);
+  console.log(currentUser);
   return (
     <Container>
       <Wrapper>
@@ -82,7 +81,7 @@ const Navbar = () => {
           <User>
             <VideoCallIcon />
             <Avatar />
-            {currentUser?.data?.name}
+            {currentUser?.name}
           </User>
         ) : (
           <Link to="signin" style={{ textDecoration: "none" }}>
