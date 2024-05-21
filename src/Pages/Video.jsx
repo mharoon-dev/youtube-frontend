@@ -15,6 +15,7 @@ import { LOCAL_URL } from "../utils/urls.jsx";
 import { format } from "timeago.js";
 import { dislike, fetchSuccess, like } from "../redux/Slices/videoSlice.jsx";
 import noAvatar from "../img/noAvatar.png";
+import { subscription } from "../redux/Slices/userSlice.jsx";
 
 const Container = styled.div`
   display: flex;
@@ -133,8 +134,15 @@ const api = axios.create({
   withCredentials: true, // Ensure this is set to send cookies
 });
 
+const VideoFrame = styled.video`
+  max-height: 720px;
+  width: 100%;
+  object-fit: cover;
+`;
+
 const Video = () => {
   const { currentUser } = useSelector((state) => state.user);
+  console.log(currentUser);
   const { currentVideo } = useSelector((state) => state.video);
   const dispatch = useDispatch();
   const path = useLocation().pathname.split("/")[2];
@@ -161,6 +169,7 @@ const Video = () => {
     fetchData();
   }, [path, dispatch]);
 
+  // like handler
   const handleLike = async () => {
     try {
       await api.put(`/users/like/${currentVideo._id}`);
@@ -171,6 +180,7 @@ const Video = () => {
     }
   };
 
+  // dislike handler
   const handleDislike = async () => {
     try {
       await api.put(`/users/dislike/${currentVideo._id}`);
@@ -181,19 +191,23 @@ const Video = () => {
     }
   };
 
+  // subscribe handler
+  const handleSub = async () => {
+    try {
+      currentUser.subscribedUsers.includes(channel._id)
+        ? await api.put(`/users/unsub/${channel._id}`)
+        : await api.put(`/users/sub/${channel._id}`);
+      dispatch(subscription(channel._id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Container>
       <Content>
         <VideoWrapper>
-          <iframe
-            width="100%"
-            height="720"
-            src="https://www.youtube.com/embed/rMiRZ1iRC0A"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
+          <VideoFrame src={currentVideo?.videoUrl}></VideoFrame>
         </VideoWrapper>
 
         <Title>{currentVideo?.title}</Title>
@@ -238,7 +252,11 @@ const Video = () => {
             </ChannelDetail>
           </ChannelInfo>
 
-          <Subscribe>Subscribe</Subscribe>
+          <Subscribe onClick={handleSub}>
+            {currentUser?.subscribedUsers?.includes(channel._id)
+              ? "SUBSCRIBED"
+              : "SUBSCRIBE"}
+          </Subscribe>
         </Channel>
         <Hr />
         <Comments videoId={currentVideo?._id} />

@@ -38,8 +38,8 @@ function App() {
         dispatch(loginStart());
         const res = await api.get("/auth/isuserloggedin");
         if (res.data) {
-          // console.log(res.data);
-          dispatch(loginSuccess(res.data.data.result));
+          console.log(res.data);
+          dispatch(loginSuccess(res.data.data));
         } 
       } catch (error) {
         console.log(error);

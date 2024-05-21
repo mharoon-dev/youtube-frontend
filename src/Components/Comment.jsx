@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { LOCAL_URL } from "../utils/urls.jsx";
+import axios from "axios";
+import { format } from "timeago.js";
+import noAvatar from "../img/noAvatar.png";
 
 const Container = styled.div`
   display: flex;
@@ -37,15 +41,35 @@ const Text = styled.span`
   font-size: 14px;
 `;
 
-const Comment = () => {
+const api = axios.create({
+  baseURL: LOCAL_URL,
+  withCredentials: true, // Ensure this is set to send cookies
+});
+
+const Comment = ({ comment }) => {
+  const [channel, setChannel] = useState({});
+
+  useEffect(() => {
+    try {
+      const fetchChannel = async () => {
+        const channelRes = await api.get(`/users/find/${comment?.userId}`);
+        console.log(channelRes.data);
+        setChannel(channelRes.data);
+      };
+      fetchChannel();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [comment?.userId]);
   return (
     <Container>
-      <Avatar src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" />
+      <Avatar src={channel?.img || noAvatar} />
       <Details>
         <Name>
-          <b>John Doe</b> - <Date>1 day ago</Date>
+          <b>{channel?.name}</b> 
+          <Date>{format(comment?.createdAt)}</Date>
         </Name>
-        <Text>This is an example of a comment</Text>
+        <Text>{comment?.desc}</Text>
       </Details>
     </Container>
   );

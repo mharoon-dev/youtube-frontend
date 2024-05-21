@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Commentx from "./Comment";
-import Comment from "./Comment";
+import Comment from "./Comment.jsx";
+import { LOCAL_URL } from "../utils/urls.jsx";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import noAvatar from "../img/noAvatar.png";
+
 
 const Container = styled.div`
   padding: 20px;
@@ -41,19 +45,33 @@ const Input = styled.input`
   }
 `;
 
-const Comments = () => {
+const api = axios.create({
+  baseURL: LOCAL_URL,
+  withCredentials: true, // Ensure this is set to send cookies
+});
+
+const Comments = ({ videoId }) => {
+  const [comments, setComments] = useState([]);
+  const { currentUser } = useSelector((state) => state.user);
+
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      const res = await api.get(`/comments/${videoId}`);
+      console.log(res.data);
+      setComments(res.data);
+    };
+    fetchComments();
+  }, [videoId]);
   return (
     <Container>
       <NewComment>
-        <Avatar src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" />
+        <Avatar src={ currentUser?.img ? currentUser?.img : noAvatar} />
         <Input placeholder="Add a comment..." />
       </NewComment>
-      <Comment />
-      <Comment />
-      <Comment />
-      <Comment />
-      <Comment />
-
+      {comments.map((comment) => (
+        <Comment key={comment._id} comment={comment} />
+      ))}
     </Container>
   );
 };
