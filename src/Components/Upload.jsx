@@ -1,5 +1,7 @@
+import axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
+import { LOCAL_URL } from "../utils/urls.jsx";
 
 const Container = styled.div`
   width: 100%;
@@ -67,54 +69,93 @@ const Label = styled.label`
   color: ${({ theme }) => theme.textSoft};
 `;
 
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const api = axios.create({
+  baseURL: LOCAL_URL,
+  withCredentials: true,
+});
+
 const Upload = ({ setOpen }) => {
   const [img, setImg] = useState(undefined);
   const [video, setVideo] = useState(undefined);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [tags, setTags] = useState([]);
+
+  const uploadVideo = async (e) => {
+    e.preventDefault(); // Prevent default form submission behavior
+    const formData = new FormData();
+    // formData.append("video", video);
+    formData.append("title", title);
+    formData.append("desc", desc);
+    formData.append("tags", tags.join(","));
+    formData.append("image", img);
+
+    try {
+      const res = await api.post("/videos/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        method: "POST",
+      });
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Container>
       <Wrapper>
         <Close onClick={() => setOpen(false) && console.log("close")}>X</Close>
         <Title>Upload a New Video</Title>
         <Label>Video:</Label>
-        <form action="/profile" method="post" enctype="multipart/form-data">
+        <Form
+          action="/profile"
+          method="post"
+          enctype="multipart/form-data"
+          onSubmit={uploadVideo}
+        >
           <Input
             type="file"
             name="video"
             accept="video/*"
             onChange={(e) => setVideo(e.target.files[0])}
           />
-        </form>
-        <Label>Title:</Label>
-        <Input
-          type="text"
-          name="title"
-          placeholder="Title"
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <Label>Description:</Label>
-        <Desc
-          rows={8}
-          name="desc"
-          placeholder="Description"
-          onChange={(e) => setDesc(e.target.value)}
-        />
-        <Input
-          type="text"
-          placeholder="Seprate the Tags with commas"
-          onChange={(e) => setTags(e.target.value.split(","))}
-        />
-        <Label>Image:</Label>
-        <Input
-          type="file"
-          accept="image/*"
-          name="image"
-          onChange={(e) => setImg(e.target.files[0])}
-        />
+          <Label>Title:</Label>
+          <Input
+            type="text"
+            name="title"
+            placeholder="Title"
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <Label>Description:</Label>
+          <Desc
+            rows={8}
+            name="desc"
+            placeholder="Description"
+            onChange={(e) => setDesc(e.target.value)}
+          />
+          <Input
+            type="text"
+            placeholder="Seprate the Tags with commas"
+            onChange={(e) => setTags(e.target.value.split(","))}
+          />
+          <Label>Image:</Label>
+          <Input
+            type="file"
+            accept="image/*"
+            name="image"
+            onChange={(e) => setImg(e.target.files[0])}
+          />
 
-        <Button>Upload</Button>
+          <Button type="submit">Upload</Button>
+        </Form>
       </Wrapper>
     </Container>
   );

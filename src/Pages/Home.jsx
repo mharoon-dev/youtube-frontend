@@ -12,6 +12,7 @@ const Container = styled.div`
 
 const api = axios.create({
   baseURL: LOCAL_URL,
+  withCredentials: true
 });
 const Home = ({ type }) => {
   const [videos, setVideos] = useState([]);
