@@ -7,7 +7,6 @@ import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import Comments from "../Components/Comments";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import Card from "../Components/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
@@ -16,6 +15,7 @@ import { format } from "timeago.js";
 import { dislike, fetchSuccess, like } from "../redux/Slices/videoSlice.jsx";
 import noAvatar from "../img/noAvatar.png";
 import { subscription } from "../redux/Slices/userSlice.jsx";
+import Recommendation from "../Components/Recommendation.jsx";
 
 const Container = styled.div`
   display: flex;
@@ -62,10 +62,6 @@ const Button = styled.div`
 const Hr = styled.hr`
   margin: 15px 0px;
   border: 0.5px solid ${({ theme }) => theme.soft};
-`;
-
-const Recommendation = styled.div`
-  flex: 2;
 `;
 
 const Channel = styled.div`
@@ -129,16 +125,16 @@ const Subscribe = styled.button`
   }
 `;
 
-const api = axios.create({
-  baseURL: LOCAL_URL,
-  withCredentials: true, // Ensure this is set to send cookies
-});
-
 const VideoFrame = styled.video`
   max-height: 720px;
   width: 100%;
   object-fit: cover;
 `;
+
+const api = axios.create({
+  baseURL: LOCAL_URL,
+  withCredentials: true, // Ensure this is set to send cookies
+});
 
 const Video = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -207,7 +203,11 @@ const Video = () => {
     <Container>
       <Content>
         <VideoWrapper>
-          <VideoFrame src={currentVideo?.videoUrl}></VideoFrame>
+          <VideoFrame
+            src={currentVideo?.videoUrl}
+            autoPlay
+            controls
+          ></VideoFrame>
         </VideoWrapper>
 
         <Title>{currentVideo?.title}</Title>
@@ -261,9 +261,7 @@ const Video = () => {
         <Hr />
         <Comments videoId={currentVideo?._id} />
       </Content>
-      <Recommendation>
-        {/* Add your recommendation component or code here */}
-      </Recommendation>
+      <Recommendation  tags={currentVideo?.tags} />
     </Container>
   );
 };

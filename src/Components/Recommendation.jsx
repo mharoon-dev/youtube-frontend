@@ -1,44 +1,43 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Card from "../Components/Card.jsx";
-import axios from "axios";
 import { LOCAL_URL } from "../utils/urls.jsx";
+import axios from "axios";
+import Card from "./Card.jsx";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
+  flex: 2;
 `;
 
 const api = axios.create({
   baseURL: LOCAL_URL,
-  withCredentials: true
+  withCredentials: true,
 });
-const Home = ({ type }) => {
+
+const Recommendation = ({ tags }) => {
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
-    console.log("fetching videos");
     const fetchVideos = async () => {
       try {
-        const res = await api.get(`/videos/${type}` , {withCredentials: true});
-        if (res.data) {
-          console.log(res.data);
-          setVideos(res.data);
-        }
+        const res = await api.get(`/videos/tags?tags=${tags}`);
+        console.log(res.data);
+        setVideos(res.data);
       } catch (error) {
         console.log(error);
       }
     };
     fetchVideos();
-  }, [ type ]);
+  }, [tags]);
   return (
     <Container>
       {videos.map((video) => (
-        <Card key={video._id} video={video} />
+        <Link to={`/video/${video._id}`} style={{ textDecoration: "none" }}>
+          <Card type="sm" key={video._id} video={video} />
+        </Link>
       ))}
     </Container>
   );
 };
 
-export default Home;
+export default Recommendation;

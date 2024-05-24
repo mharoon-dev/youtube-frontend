@@ -9,6 +9,7 @@ import {
   loginSuccess,
 } from "../redux/Slices/userSlice.jsx";
 import Cookies from "js-cookie";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -108,10 +109,17 @@ const SignIn = () => {
       });
       console.log(res.data);
       dispatch(loginSuccess(res.data.data));
-      Cookies.set("access_token", res.data.token, {
+
+      const accessToken = res.data.token;
+
+      Cookies.set("access_token", accessToken, {
         sameSite: "Lax",
         secure: true,
       });
+
+      localStorage.setItem("access_token", JSON.stringify(accessToken));
+
+      Navigate("/");
     } catch (error) {
       console.log(error);
       dispatch(loginFailure(error));

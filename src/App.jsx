@@ -10,7 +10,13 @@ import SignIn from "./Pages/SignIn.jsx";
 import axios from "axios";
 import { LOCAL_URL } from "./utils/urls.jsx";
 import { useDispatch } from "react-redux";
-import { loginFailure, loginStart, loginSuccess } from "./redux/Slices/userSlice.jsx";
+import {
+  loginFailure,
+  loginStart,
+  loginSuccess,
+} from "./redux/Slices/userSlice.jsx";
+import Cookies from "js-cookie";
+import Search from "./Pages/Search.jsx";
 
 const Container = styled.div`
   display: flex;
@@ -34,13 +40,21 @@ function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     const isUserLoggedIn = async () => {
+      const token = JSON.parse(localStorage.getItem("access_token"));
+      const tokenFromCookies = Cookies.get("access_token");
+      if (!token) return dispatch(loginFailure());
+
+      dispatch(loginStart());
+
       try {
         dispatch(loginStart());
-        const res = await api.get("/auth/isuserloggedin");
+        const res = await api.get("/auth/isuserloggedin", {
+          headers: { Authorization: `Bearer ${tokenFromCookies || token}` },
+        });
         if (res.data) {
           console.log(res.data);
           dispatch(loginSuccess(res.data.data));
-        } 
+        }
       } catch (error) {
         console.log(error);
         dispatch(loginFailure(error));
@@ -64,6 +78,7 @@ function App() {
                 <Route path="/subscriptions" element={<Home type="sub" />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/video/:id" element={<Video />} />
+                <Route path="/search" element={<Search />} />
               </Routes>
             </Wrapper>
           </Main>

@@ -2,6 +2,14 @@ import axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { LOCAL_URL } from "../utils/urls.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  uploadingStart,
+  uploadingSuccess,
+  uploadingFailure,
+} from "../redux/Slices/videouploadingSlice.jsx";
+import CircularProgress from "@mui/material/CircularProgress";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 const Container = styled.div`
   width: 100%;
@@ -86,17 +94,21 @@ const Upload = ({ setOpen }) => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [tags, setTags] = useState([]);
+  const dispatch = useDispatch();
+  const { videoUploading } = useSelector((state) => state);
+  console.log(videoUploading);
 
   const uploadVideo = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
     const formData = new FormData();
-    // formData.append("video", video);
+    formData.append("video", video);
     formData.append("title", title);
     formData.append("desc", desc);
     formData.append("tags", tags.join(","));
     formData.append("image", img);
 
     try {
+      dispatch(uploadingStart());
       const res = await api.post("/videos/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -104,8 +116,11 @@ const Upload = ({ setOpen }) => {
         method: "POST",
       });
       console.log(res.data);
+      dispatch(uploadingSuccess());
     } catch (error) {
       console.error(error);
+      uploadingFailure(error);
+      dispatch(uploadingFailure());
     }
   };
 
@@ -154,7 +169,17 @@ const Upload = ({ setOpen }) => {
             onChange={(e) => setImg(e.target.files[0])}
           />
 
-          <Button type="submit">Upload</Button>
+          <Button type="submit">
+            {videoUploading.loading ? (
+              <CircularProgress color="inherit" />
+            ) : videoUploading.success ? (
+              "Uploaded Successfully"
+            ) : videoUploading.error ? (
+              <RestartAltIcon />
+            ) : (
+              "Upload"
+            )}
+          </Button>
         </Form>
       </Wrapper>
     </Container>

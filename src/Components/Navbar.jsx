@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Changed import
 import { useSelector } from "react-redux";
 import { Avatar } from "@mui/material";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
@@ -36,7 +36,8 @@ const Search = styled.div`
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 3px;
-`;
+  color: ${({ theme }) => theme.text};
+  `;
 
 const Input = styled.input`
   border: none;
@@ -53,7 +54,6 @@ const Button = styled.button`
   border-radius: 3px;
   font-weight: 500;
   cursor: pointer;
-  margin-top: 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -68,17 +68,28 @@ const User = styled.div`
   color: ${({ theme }) => theme.text};
 `;
 
-const Navbar = () => {
+const Navbar = ( { theme}) => {
   const [open, setOpen] = useState(false);
+  const [q, setQ] = useState("");
   const { currentUser } = useSelector((state) => state.user);
-  console.log(currentUser);
+  const navigate = useNavigate(); // Changed from redirect to useNavigate
+
+  const handleClick = () => {
+    console.log("Search button clicked");
+    console.log(q);
+    navigate(`/search?q=${q}`); // Using navigate to redirect
+  };
+
   return (
     <>
       <Container>
         <Wrapper>
-          <Search>
-            <Input placeholder="Search" />
-            <SearchOutlinedIcon />
+          <Search theme={theme} >
+            <Input
+              placeholder="Search"
+              onChange={(e) => setQ(e.target.value)}
+            />
+            <SearchOutlinedIcon onClick={handleClick} /> {/* Removed arrow function */}
           </Search>
           {currentUser ? (
             <User>
