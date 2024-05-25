@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { LOCAL_URL } from "../utils/urls.jsx";
+import { LOCAL_URL, PROD_URL } from "../utils/urls.jsx";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import {
@@ -89,7 +89,7 @@ const Link = styled.span`
 `;
 
 const api = axios.create({
-  baseURL: LOCAL_URL,
+  baseURL: PROD_URL,
   withCredentials: true, // Ensure this is set to send cookies
 });
 

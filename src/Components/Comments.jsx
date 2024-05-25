@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Comment from "./Comment.jsx";
-import { LOCAL_URL } from "../utils/urls.jsx";
+import { LOCAL_URL, PROD_URL } from "../utils/urls.jsx";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import noAvatar from "../img/noAvatar.png";
@@ -46,7 +46,7 @@ const Input = styled.input`
 `;
 
 const api = axios.create({
-  baseURL: LOCAL_URL,
+  baseURL: PROD_URL,
   withCredentials: true, // Ensure this is set to send cookies
 });
 

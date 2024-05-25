@@ -8,7 +8,7 @@ import Video from "./Pages/Video.jsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignIn from "./Pages/SignIn.jsx";
 import axios from "axios";
-import { LOCAL_URL } from "./utils/urls.jsx";
+import { LOCAL_URL, PROD_URL } from "./utils/urls.jsx";
 import { useDispatch } from "react-redux";
 import {
   loginFailure,
@@ -32,7 +32,7 @@ const Wrapper = styled.div`
 `;
 
 const api = axios.create({
-  baseURL: LOCAL_URL,
+  baseURL: PROD_URL,
   withCredentials: true,
 });
 

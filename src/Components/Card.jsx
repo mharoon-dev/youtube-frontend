@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { format } from "timeago.js";
-import { LOCAL_URL } from "../utils/urls.jsx";
+import { LOCAL_URL, PROD_URL } from "../utils/urls.jsx";
 import noAvatar from "../img/noAvatar.png";
 
 const Container = styled.div`
@@ -65,7 +65,7 @@ const Info = styled.div`
 `;
 
 const api = axios.create({
-  baseURL: LOCAL_URL,
+  baseURL: PROD_URL,
 });
 
 const Card = ({ type, video }) => {
