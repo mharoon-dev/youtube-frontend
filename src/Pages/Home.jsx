@@ -6,7 +6,7 @@ import { LOCAL_URL, PROD_URL } from "../utils/urls.jsx";
 
 const Container = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   flex-wrap: wrap;
 `;
 

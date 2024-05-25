@@ -20,6 +20,9 @@ const Image = styled.img`
   background-color: #999;
   cursor: pointer;
   flex: 1;
+  border-radius: 3px;
+  /* border: 7px solid green; */
+  object-fit:  cover;
 `;
 
 const Details = styled.div`
