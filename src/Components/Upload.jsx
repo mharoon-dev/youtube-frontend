@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { LOCAL_URL, PROD_URL } from "../utils/urls.jsx";
+import { URL } from "../utils/urls.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import {
   uploadingStart,
@@ -84,7 +84,7 @@ const Form = styled.form`
 `;
 
 const api = axios.create({
-  baseURL: PROD_URL,
+  baseURL: URL,
   withCredentials: true,
 });
 

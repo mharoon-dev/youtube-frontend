@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { format } from "timeago.js";
-import { LOCAL_URL, PROD_URL } from "../utils/urls.jsx";
 import noAvatar from "../img/noAvatar.png";
+import { URL} from "../utils/urls.jsx";
 
 const Container = styled.div`
   width: ${(props) => props.type !== "sm" && "360px"};
@@ -68,11 +68,11 @@ const Info = styled.div`
 `;
 
 const api = axios.create({
-  baseURL: PROD_URL,
+  baseURL: URL,
 });
 
 const Card = ({ type, video }) => {
-  console.log("video", video);
+  // console.log("video", video);
   const [channel, setChannel] = useState({});
 
   useEffect(() => {
@@ -81,7 +81,7 @@ const Card = ({ type, video }) => {
       try {
         const res = await api.get(`/users/find/${video.userId}`);
         if (res.data) {
-          console.log(res.data);
+          // console.log(res.data);
           setChannel(res.data);
         }
       } catch (error) {

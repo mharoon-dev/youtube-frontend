@@ -8,7 +8,7 @@ import Video from "./Pages/Video.jsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignIn from "./Pages/SignIn.jsx";
 import axios from "axios";
-import { LOCAL_URL, PROD_URL } from "./utils/urls.jsx";
+import { URL } from "./utils/urls.jsx";
 import { useDispatch } from "react-redux";
 import {
   loginFailure,
@@ -32,7 +32,7 @@ const Wrapper = styled.div`
 `;
 
 const api = axios.create({
-  baseURL: PROD_URL,
+  baseURL: URL,
   withCredentials: true,
 });
 
@@ -41,15 +41,13 @@ function App() {
   useEffect(() => {
     const isUserLoggedIn = async () => {
       const token = JSON.parse(localStorage.getItem("access_token"));
-      const tokenFromCookies = Cookies.get("access_token");
-      if (!token) return dispatch(loginFailure());
+      if (!token) return dispatch(loginFailure()) && console.log("no token");
 
       dispatch(loginStart());
 
       try {
-        dispatch(loginStart());
         const res = await api.get("/auth/isuserloggedin", {
-          headers: { Authorization: `Bearer ${tokenFromCookies || token}` },
+          headers: { authorization: `Bearer ${token}` },
         });
         if (res.data) {
           console.log(res.data);

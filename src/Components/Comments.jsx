@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Comment from "./Comment.jsx";
-import { LOCAL_URL, PROD_URL } from "../utils/urls.jsx";
+import { URL } from "../utils/urls.jsx";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import noAvatar from "../img/noAvatar.png";
-
 
 const Container = styled.div`
   padding: 20px;
@@ -46,14 +45,13 @@ const Input = styled.input`
 `;
 
 const api = axios.create({
-  baseURL: PROD_URL,
+  baseURL: URL,
   withCredentials: true, // Ensure this is set to send cookies
 });
 
 const Comments = ({ videoId }) => {
   const [comments, setComments] = useState([]);
   const { currentUser } = useSelector((state) => state.user);
-
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -66,7 +64,7 @@ const Comments = ({ videoId }) => {
   return (
     <Container>
       <NewComment>
-        <Avatar src={ currentUser?.img ? currentUser?.img : noAvatar} />
+        <Avatar src={currentUser?.img ? currentUser?.img : noAvatar} />
         <Input placeholder="Add a comment..." />
       </NewComment>
       {comments.map((comment) => (

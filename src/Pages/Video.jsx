@@ -10,12 +10,12 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { LOCAL_URL, PROD_URL } from "../utils/urls.jsx";
 import { format } from "timeago.js";
 import { dislike, fetchSuccess, like } from "../redux/Slices/videoSlice.jsx";
 import noAvatar from "../img/noAvatar.png";
 import { subscription } from "../redux/Slices/userSlice.jsx";
 import Recommendation from "../Components/Recommendation.jsx";
+import { URL } from "../utils/urls.jsx";
 
 const Container = styled.div`
   display: flex;
@@ -132,7 +132,7 @@ const VideoFrame = styled.video`
 `;
 
 const api = axios.create({
-  baseURL: PROD_URL,
+  baseURL: URL,
   withCredentials: true, // Ensure this is set to send cookies
 });
 

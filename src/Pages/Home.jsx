@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Card from "../Components/Card.jsx";
 import axios from "axios";
-import { LOCAL_URL, PROD_URL } from "../utils/urls.jsx";
+import { URL } from "../utils/urls.jsx";
 
 const Container = styled.div`
   display: flex;
@@ -11,19 +11,19 @@ const Container = styled.div`
 `;
 
 const api = axios.create({
-  baseURL: PROD_URL,
+  baseURL: URL,
   withCredentials: true
 });
 const Home = ({ type }) => {
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
-    console.log("fetching videos");
+    // console.log("fetching videos");
     const fetchVideos = async () => {
       try {
         const res = await api.get(`/videos/${type}` , {withCredentials: true});
         if (res.data) {
-          console.log(res.data);
+          // console.log(res.data);
           setVideos(res.data);
         }
       } catch (error) {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { LOCAL_URL, PROD_URL } from "../utils/urls.jsx";
+import { URL } from "../utils/urls.jsx";
 import axios from "axios";
 import { format } from "timeago.js";
 import noAvatar from "../img/noAvatar.png";
@@ -42,7 +42,7 @@ const Text = styled.span`
 `;
 
 const api = axios.create({
-  baseURL: PROD_URL,
+  baseURL: URL,
   withCredentials: true, // Ensure this is set to send cookies
 });
 

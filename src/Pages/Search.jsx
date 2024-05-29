@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { LOCAL_URL, PROD_URL } from '../utils/urls.jsx';
+import { URL } from '../utils/urls.jsx';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import Card from '../Components/Card.jsx';
@@ -13,7 +13,7 @@ const Container = styled.div`
 `
 
 const api = axios.create({
-    baseURL: PROD_URL,
+    baseURL: URL,
     withCredentials: true
   });
 

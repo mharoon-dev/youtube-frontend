@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { LOCAL_URL, PROD_URL } from "../utils/urls.jsx";
+import { URL } from "../utils/urls.jsx";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import {
@@ -88,9 +88,11 @@ const Link = styled.span`
   }
 `;
 
+axios.defaults.withCredentials = true;
+
 const api = axios.create({
-  baseURL: PROD_URL,
-  withCredentials: true, // Ensure this is set to send cookies
+  baseURL: URL,
+  withCredentials: true,
 });
 
 const SignIn = () => {
@@ -111,11 +113,12 @@ const SignIn = () => {
       dispatch(loginSuccess(res.data.data));
 
       const accessToken = res.data.token;
+      console.log(accessToken, "====>>> accessToken");
 
-      Cookies.set("access_token", accessToken, {
-        sameSite: "Lax",
-        secure: true,
-      });
+      // Cookies.set("access_token", accessToken, {
+      //   sameSite: "Lax",
+      //   secure: true,
+      // });
 
       localStorage.setItem("access_token", JSON.stringify(accessToken));
 
