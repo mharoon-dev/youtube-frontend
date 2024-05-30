@@ -108,12 +108,11 @@ const Upload = ({ setOpen }) => {
     formData.append("image", img);
 
     try {
+      const token = JSON.parse(localStorage.getItem("access_token"));
+      if (!token) return dispatch(loginFailure()) && console.log("no token");
       dispatch(uploadingStart());
       const res = await api.post("/videos/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        method: "POST",
+        headers: { authorization: `Bearer ${token}` },
       });
       console.log(res.data);
       dispatch(uploadingSuccess());
