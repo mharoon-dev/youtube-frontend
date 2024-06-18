@@ -168,8 +168,13 @@ const Video = () => {
   // like handler
   const handleLike = async () => {
     try {
-      await api.put(`/users/like/${currentVideo._id}`);
-      console.log(" liked");
+      const token = JSON.parse(localStorage.getItem("access_token"));
+      if (!token) return dispatch(loginFailure()) && console.log("no token");
+      const config = {
+        headers: { authorization: `Bearer ${token}` }
+      };
+      await api.put(`/users/like/${currentVideo._id}`, {}, config);
+      console.log("liked");
       dispatch(like(currentUser._id));
     } catch (error) {
       console.log(error);
@@ -179,8 +184,13 @@ const Video = () => {
   // dislike handler
   const handleDislike = async () => {
     try {
-      await api.put(`/users/dislike/${currentVideo._id}`);
-      console.log(" disliked");
+      const token = JSON.parse(localStorage.getItem("access_token"));
+      if (!token) return dispatch(loginFailure()) && console.log("no token");
+      const config = {
+        headers: { authorization: `Bearer ${token}` }
+      };
+      await api.put(`/users/dislike/${currentVideo._id}`, {}, config);
+      console.log("disliked");
       dispatch(dislike(currentUser._id));
     } catch (error) {
       console.log(error);
@@ -188,16 +198,22 @@ const Video = () => {
   };
 
   // subscribe handler
-  const handleSub = async () => {
-    try {
-      currentUser.subscribedUsers.includes(channel._id)
-        ? await api.put(`/users/unsub/${channel._id}`)
-        : await api.put(`/users/sub/${channel._id}`);
-      dispatch(subscription(channel._id));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const handleSub = async () => {
+  try {
+    const token = JSON.parse(localStorage.getItem("access_token"));
+    if (!token) return dispatch(loginFailure()) && console.log("no token");
+    const config = {
+      headers: { authorization: `Bearer ${token}` }
+    };
+    const endpoint = currentUser.subscribedUsers.includes(channel._id) 
+      ? `/users/unsub/${channel._id}`
+      : `/users/sub/${channel._id}`;
+    await api.put(endpoint, {}, config);
+    dispatch(subscription(channel._id));
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   return (
     <Container>
@@ -261,7 +277,7 @@ const Video = () => {
         <Hr />
         <Comments videoId={currentVideo?._id} />
       </Content>
-      <Recommendation  tags={currentVideo?.tags} />
+      <Recommendation tags={currentVideo?.tags} />
     </Container>
   );
 };

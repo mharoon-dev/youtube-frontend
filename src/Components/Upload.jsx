@@ -99,27 +99,33 @@ const Upload = ({ setOpen }) => {
   console.log(videoUploading);
 
   const uploadVideo = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
-    const formData = new FormData();
-    formData.append("video", video);
-    formData.append("title", title);
-    formData.append("desc", desc);
-    formData.append("tags", tags.join(","));
-    formData.append("image", img);
-
     try {
+      e.preventDefault(); // Prevent default form submission behavior
+      const formData = new FormData();
+      formData.append("video", video);
+      formData.append("title", title);
+      formData.append("desc", desc);
+      formData.append("tags", tags.join(","));
+      formData.append("image", img);
+
       const token = JSON.parse(localStorage.getItem("access_token"));
-      if (!token) return dispatch(loginFailure()) && console.log("no token");
-      dispatch(uploadingStart());
-      const res = await api.post("/videos/upload", formData, {
+      if (!token) {
+        dispatch(loginFailure());
+        console.log("no token");
+        return;
+      }
+
+      const config = {
         headers: { authorization: `Bearer ${token}` },
-      });
+      };
+
+      dispatch(uploadingStart());
+      const res = await api.post("/videos/upload", formData, config);
       console.log(res.data);
       dispatch(uploadingSuccess());
     } catch (error) {
       console.error(error);
-      uploadingFailure(error);
-      dispatch(uploadingFailure());
+      dispatch(uploadingFailure(error));
     }
   };
 

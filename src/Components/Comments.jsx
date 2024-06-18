@@ -50,6 +50,7 @@ const api = axios.create({
 });
 
 const Comments = ({ videoId }) => {
+  // console.log(videoId + "===>>>> videoId");
   const [comments, setComments] = useState([]);
   const { currentUser } = useSelector((state) => state.user);
 

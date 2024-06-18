@@ -16,14 +16,15 @@ const api = axios.create({
 });
 const Home = ({ type }) => {
   const [videos, setVideos] = useState([]);
-
   useEffect(() => {
-    // console.log("fetching videos");
     const fetchVideos = async () => {
       try {
-        const res = await api.get(`/videos/${type}` , {withCredentials: true});
+        const token = JSON.parse(localStorage.getItem("access_token"));
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        const res = await api.get(`/videos/${type}`, config);
         if (res.data) {
-          // console.log(res.data);
           setVideos(res.data);
         }
       } catch (error) {
@@ -31,7 +32,7 @@ const Home = ({ type }) => {
       }
     };
     fetchVideos();
-  }, [ type ]);
+  }, [type]);
   return (
     <Container>
       {videos.map((video) => (

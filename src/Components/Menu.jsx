@@ -88,7 +88,7 @@ const Title = styled.h2`
 `;
 
 const Menu = ({ darkMode, setDarkMode }) => {
-  const {currentUser} = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
   return (
     <>
       <Container>
@@ -133,19 +133,19 @@ const Menu = ({ darkMode, setDarkMode }) => {
             History
           </Item>
           <Hr />
-          { currentUser ? (
+          {currentUser ? (
             ""
           ) : (
             <Login>
-            Sign in to like videos, comment, and subscribe.
-            <Link to="/signin" style={{ textDecoration: "none" }}>
-              <Button>
-                <AccountCircleOutlinedIcon />
-                SIGN IN
-              </Button>
-            </Link>
-            <Hr />
-          </Login>
+              Sign in to like videos, comment, and subscribe.
+              <Link to="/signin" style={{ textDecoration: "none" }}>
+                <Button>
+                  <AccountCircleOutlinedIcon />
+                  SIGN IN
+                </Button>
+              </Link>
+              <Hr />
+            </Login>
           )}
           <Title>BEST OF YOUTUBE</Title>
           <Item>
